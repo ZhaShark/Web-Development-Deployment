@@ -14,14 +14,14 @@ body {
     margin: 0;
 }
 
-/* Mobile First - 宽边框和堆叠布局 */
+/* Mobile First - Wide borders and stacked layout */
 .container {
     max-width: 100%;
     padding: 1rem;
     margin: 0 auto;
 }
 
-/* 在小屏幕上添加宽边框 */
+/* Add wide borders on small screens */
 @media (max-width: 768px) {
     .container {
         padding: 1.5rem;
@@ -32,7 +32,7 @@ body {
     }
 }
 
-/* 导航栏 - 移动优先堆叠 */
+/* Navigation Bar - Mobile First Stacking */
 .navbar {
     background: #2c3e50;
     color: white;
@@ -71,7 +71,7 @@ body {
     border-color: #3498db;
 }
 
-/* 主内容区域 - 移动优先 */
+/* Main Content Area - Mobile First */
 .hero {
     text-align: center;
     padding: 2rem 1rem;
@@ -100,7 +100,7 @@ body {
     align-items: center;
 }
 
-/* 特性卡片 - 移动优先堆叠 */
+/* Feature Cards - Mobile First Stacking */
 .features {
     display: flex;
     flex-direction: column;
@@ -128,7 +128,7 @@ body {
     color: #2c3e50;
 }
 
-/* 按钮样式 */
+/* Button Styles */
 .btn {
     display: inline-block;
     padding: 1rem 2rem;
@@ -166,7 +166,7 @@ body {
     transform: translateY(-2px);
 }
 
-/* 表单样式 - 移动优先 */
+/* Form Styles - Mobile First */
 .auth-container {
     display: flex;
     justify-content: center;
@@ -214,7 +214,7 @@ body {
     border-color: #3498db;
 }
 
-/* 搜索页面 - 移动优先 */
+/* Search Page - Mobile First */
 .search-container {
     width: 100%;
     padding: 1rem;
@@ -242,7 +242,7 @@ body {
     gap: 1rem;
 }
 
-/* 搜索结果 */
+/* Search Results */
 .search-results {
     background: white;
     padding: 1.5rem;
@@ -269,7 +269,7 @@ body {
     border-color: #3498db;
 }
 
-/* 个人资料页面 */
+/* Profile Page */
 .profile-container {
     width: 100%;
     padding: 1rem;
@@ -291,7 +291,7 @@ body {
     border: 3px solid #e0e0e0;
 }
 
-/* 平板电脑布局 */
+/* Tablet Layout */
 @media (min-width: 768px) {
     .container {
         max-width: 1200px;
@@ -349,7 +349,7 @@ body {
     }
 }
 
-/* 桌面布局 */
+/* Desktop Layout */
 @media (min-width: 1024px) {
     .search-grid {
         grid-template-columns: repeat(3, 1fr);
@@ -364,7 +364,7 @@ body {
     }
 }
 
-/* 消息样式 */
+/* Message Styles */
 .message {
     padding: 1rem;
     border-radius: 8px;
@@ -385,7 +385,7 @@ body {
     border-color: #f5c6cb;
 }
 
-/* 加载动画 */
+/* Loading Animation */
 .loading {
     text-align: center;
     padding: 2rem;
@@ -393,7 +393,7 @@ body {
     color: #666;
 }
 
-/* 页脚 */
+/* Footer */
 footer {
     background: #2c3e50;
     color: white;
