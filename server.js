@@ -110,19 +110,7 @@ app.post('/api/auth/login', async (req, res) => {
     }
 });
 
-// Fallback to index.html for SPA routes
-app.get('*', (req, res) => {
-    res.sendFile(path.join(__dirname, 'public', 'index.html'));
-});
 
-app.listen(PORT, HOST, () => {
-    const localIP = getLocalIP();
-    console.log('Library System Mobile Test Server (Express + MongoDB)');
-    console.log('=====================================================');
-    console.log(`Computer: http://localhost:${PORT}`);
-    console.log(`Phone:    http://${localIP}:${PORT}`);
-    console.log('=====================================================');
-});
 
 // Auth middleware
 const authMiddleware = (req, res, next) => {
@@ -207,4 +195,18 @@ app.delete('/api/users/profile', authMiddleware, async (req, res) => {
         console.error('Delete profile error:', err);
         res.status(500).json({ error: 'Server error' });
     }
+});
+
+// Fallback to index.html for SPA routes
+app.get('*', (req, res) => {
+    res.sendFile(path.join(__dirname, 'public', 'index.html'));
+});
+
+app.listen(PORT, HOST, () => {
+    const localIP = getLocalIP();
+    console.log('Library System Mobile Test Server (Express + MongoDB)');
+    console.log('=====================================================');
+    console.log(`Computer: http://localhost:${PORT}`);
+    console.log(`Phone:    http://${localIP}:${PORT}`);
+    console.log('=====================================================');
 });
