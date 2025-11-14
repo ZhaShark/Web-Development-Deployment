@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profile - Library</title>
+    <link rel="stylesheet" href="/css/style.css">
+    <script src="/js/auth.js"></script>
+</head>
+<body>
+    <header>
+        <nav class="navbar">
+            <div class="nav-brand">
+                <h1>Library</h1>
+            </div>
+            <div class="nav-links" id="navLinks">
+                <a href="index.html">Home</a>
+                <a href="search.html">Book Search</a>
+                <span id="authLinks">
+                    <a href="login.html">Login</a>
+                    <a href="register.html">Register</a>
+                </span>
+                <span id="userLinks" style="display: none;">
+                    <a href="profile.html">Profile</a>
+                    <a href="#" onclick="logout()">Logout</a>
+                    <span id="userWelcome"></span>
+                </span>
+            </div>
+        </nav>
+    </header>
+
+    <main class="container">
+        <h2>Personal Management</h2>
+
+        <div class="profile-container">
+            <div class="profile-view">
+                <h3>Account Info</h3>
+                <p><strong>Username:</strong> <span id="viewUsername"></span></p>
+                <p><strong>Email:</strong> <span id="viewEmail"></span></p>
+                <p><strong>Name:</strong> <span id="viewName"></span></p>
+                <p><strong>Phone:</strong> <span id="viewPhone"></span></p>
+                <p><strong>Address:</strong> <span id="viewAddress"></span></p>
+                <p><strong>Joined:</strong> <span id="viewCreatedAt"></span></p>
+            </div>
+
+            <div class="profile-edit">
+                <h3>Edit Profile</h3>
+                <form id="editForm">
+                    <div class="form-group">
+                        <label for="editUsername">Username</label>
+                        <input type="text" id="editUsername" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="editEmail">Email</label>
+                        <input type="email" id="editEmail" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="editFirstName">First Name</label>
+                        <input type="text" id="editFirstName">
+                    </div>
+                    <div class="form-group">
+                        <label for="editLastName">Last Name</label>
+                        <input type="text" id="editLastName">
+                    </div>
+                    <div class="form-group">
+                        <label for="editPhone">Phone</label>
+                        <input type="text" id="editPhone">
+                    </div>
+                    <div class="form-group">
+                        <label for="editAddress">Address</label>
+                        <textarea id="editAddress" rows="3"></textarea>
+                    </div>
+
+                    <h4>Change Password</h4>
+                    <div class="form-group">
+                        <label for="oldPassword">Current Password</label>
+                        <input type="password" id="oldPassword">
+                    </div>
+                    <div class="form-group">
+                        <label for="newPassword">New Password</label>
+                        <input type="password" id="newPassword">
+                    </div>
+                    <div class="form-group">
+                        <label for="confirmPassword">Confirm New Password</label>
+                        <input type="password" id="confirmPassword">
+                    </div>
+
+                    <button type="submit" class="btn btn-primary">Save Changes</button>
+                </form>
+
+                <div class="danger-zone">
+                    <h4>Danger Zone</h4>
+                    <button class="btn btn-danger" onclick="confirmDelete()">Delete Account</button>
+                </div>
+
+                <div id="message" class="message"></div>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <p>&copy; 2025 Library. All rights reserved.</p>
+    </footer>
+
+    <script src="/js/profile.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const token = localStorage.getItem('token');
+            const user = localStorage.getItem('user');
+
+            if (token && user) {
+                document.getElementById('authLinks').style.display = 'none';
+                document.getElementById('userLinks').style.display = 'block';
+                document.getElementById('userWelcome').textContent = 'Welcome, ' + JSON.parse(user).username;
+            } else {
+                // redirect to login if not authenticated
+                window.location.href = 'login.html';
+            }
+
+            // Load profile data
+            if (typeof profileManager !== 'undefined') {
+                profileManager.loadProfile();
+            }
+        });
+
+        function logout() {
+            localStorage.removeItem('token');
+            localStorage.removeItem('user');
+            window.location.href = 'index.html';
+        }
+    </script>
+</body>
+</html>

@@ -1,4 +1,5 @@
-const API_BASE_URL = 'http://localhost:5000/api';
+// Use a relative API base so the frontend works when accessed from phone or computer
+const API_BASE_URL = '/api';
 
 const authAPI = {
     async request(endpoint, options = {}) {

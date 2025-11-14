@@ -118,6 +118,13 @@ body {
     border: 2px solid #e0e0e0;
 }
 
+/* When feature card is an anchor, remove underline and inherit color */
+.feature-card.link-card {
+    display: block;
+    text-decoration: none;
+    color: inherit;
+}
+
 .feature-card:hover {
     transform: translateY(-5px);
 }
