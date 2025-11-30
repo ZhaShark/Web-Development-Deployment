@@ -54,8 +54,15 @@ const bookSearch = {
         }
 
         resultsList.innerHTML = books.map(book => `
-            <div class="book-card">
-                <h4>${book.title}</h4>
+            <div class="book-card" data-book-id="${book._id}">
+                <div class="book-header">
+                    <h4>${book.title}</h4>
+                    <button class="favorite-btn ${this.isBookInFavorites(book._id) ? 'favorited' : ''}" 
+                            onclick="bookSearch.toggleFavorite('${book._id}')"
+                            ${!localStorage.getItem('token') ? 'disabled title="Please login to add favorites"' : ''}>
+                        ♥
+                    </button>
+                </div>
                 <p><strong>Author:</strong> ${book.author}</p>
                 <p><strong>Publication Year:</strong> ${book.publication_year}</p>
                 <p><strong>Genre:</strong> ${book.genre || 'Uncategorized'}</p>
@@ -66,6 +73,96 @@ const bookSearch = {
                 <p><strong>Available Copies:</strong> <span class="copies-available">${book.copies_available}</span></p>
             </div>
         `).join('');
+    },
+
+    isBookInFavorites(bookId) {
+        const favorites = JSON.parse(localStorage.getItem('favorites') || '[]');
+        return favorites.includes(bookId);
+    },
+
+    async toggleFavorite(bookId) {
+        const token = localStorage.getItem('token');
+        if (!token) {
+            alert('Please login to add books to favorites');
+            return;
+        }
+
+        try {
+            if (this.isBookInFavorites(bookId)) {
+                // Remove from favorites
+                await this.removeFromFavorites(bookId);
+            } else {
+                // Add to favorites
+                await this.addToFavorites(bookId);
+            }
+        } catch (error) {
+            console.error('Favorite toggle error:', error);
+            alert('Failed to update favorites: ' + error.message);
+        }
+    },
+
+    async addToFavorites(bookId) {
+        const token = localStorage.getItem('token');
+        const response = await fetch(`${API_BASE_URL}/books/favorites`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
+            },
+            body: JSON.stringify({ bookId })
+        });
+
+        if (!response.ok) {
+            const data = await response.json();
+            throw new Error(data.error || 'Failed to add to favorites');
+        }
+
+        // Update local storage
+        const favorites = JSON.parse(localStorage.getItem('favorites') || '[]');
+        if (!favorites.includes(bookId)) {
+            favorites.push(bookId);
+            localStorage.setItem('favorites', JSON.stringify(favorites));
+        }
+
+        // Update UI
+        this.updateFavoriteButton(bookId, true);
+    },
+
+    async removeFromFavorites(bookId) {
+        const token = localStorage.getItem('token');
+        const response = await fetch(`${API_BASE_URL}/books/favorites/${bookId}`, {
+            method: 'DELETE',
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        });
+
+        if (!response.ok) {
+            const data = await response.json();
+            throw new Error(data.error || 'Failed to remove from favorites');
+        }
+
+        // Update local storage
+        const favorites = JSON.parse(localStorage.getItem('favorites') || '[]');
+        const updatedFavorites = favorites.filter(id => id !== bookId);
+        localStorage.setItem('favorites', JSON.stringify(updatedFavorites));
+
+        // Update UI
+        this.updateFavoriteButton(bookId, false);
+    },
+
+    updateFavoriteButton(bookId, isFavorited) {
+        const bookCard = document.querySelector(`[data-book-id="${bookId}"]`);
+        if (bookCard) {
+            const favoriteBtn = bookCard.querySelector('.favorite-btn');
+            if (isFavorited) {
+                favoriteBtn.classList.add('favorited');
+                favoriteBtn.title = 'Remove from favorites';
+            } else {
+                favoriteBtn.classList.remove('favorited');
+                favoriteBtn.title = 'Add to favorites';
+            }
+        }
     },
 
     showLoading(show) {

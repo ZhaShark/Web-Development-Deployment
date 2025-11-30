@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Favorites - Library</title>
+    <link rel="stylesheet" href="/css/style.css">
+    <script src="/js/auth.js"></script>
+</head>
+<body>
+    <header>
+        <nav class="navbar">
+            <div class="nav-brand">
+                <h1>Library</h1>
+            </div>
+            <div class="nav-links" id="navLinks">
+                <a href="index.html">Home</a>
+                <a href="search.html">Book Search</a>
+                <span id="authLinks">
+                    <a href="login.html">Login</a>
+                    <a href="register.html">Register</a>
+                </span>
+                <span id="userLinks" style="display: none;">
+                    <a href="profile.html">Profile</a>
+                    <a href="favorites.html" class="active">My Favorites</a>
+                    <a href="#" onclick="logout()">Logout</a>
+                    <span id="userWelcome"></span>
+                </span>
+            </div>
+        </nav>
+    </header>
+
+    <main class="container">
+        <h2>My Favorite Books</h2>
+
+        <div class="favorites-container">
+            <div id="loading" class="loading" style="display: none;">
+                Loading your favorites...
+            </div>
+
+            <div id="favoritesList" class="favorites-list">
+                <!-- Favorites will be loaded here -->
+            </div>
+
+            <div id="emptyFavorites" class="empty-state" style="display: none;">
+                <h3>No favorite books yet</h3>
+                <p>Start exploring books and add them to your favorites!</p>
+                <a href="search.html" class="btn btn-primary">Explore Books</a>
+            </div>
+
+            <div id="message" class="message"></div>
+        </div>
+    </main>
+
+    <footer>
+        <p>&copy; 2025 Library. All rights reserved.</p>
+    </footer>
+
+    <script src="/js/favorites.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const token = localStorage.getItem('token');
+            const user = localStorage.getItem('user');
+
+            if (token && user) {
+                document.getElementById('authLinks').style.display = 'none';
+                document.getElementById('userLinks').style.display = 'block';
+                document.getElementById('userWelcome').textContent = 'Welcome, ' + JSON.parse(user).username;
+                
+                // Load favorites
+                if (typeof favoritesManager !== 'undefined') {
+                    favoritesManager.loadFavorites();
+                }
+            } else {
+                // redirect to login if not authenticated
+                window.location.href = 'login.html';
+            }
+        });
+
+        function logout() {
+            localStorage.removeItem('token');
+            localStorage.removeItem('user');
+            window.location.href = 'index.html';
+        }
+    </script>
+</body>
+</html>
