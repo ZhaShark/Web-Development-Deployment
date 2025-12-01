@@ -1,0 +1,363 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Book Reviews</title>
+    <link rel="stylesheet" href="/css/style.css">
+    <style>
+        /* Review Page Specific Styles */
+        #main-nav {
+            background-color: #333;
+            padding: 1rem;
+            margin-bottom: 2rem;
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        #main-nav a {
+            color: #fff;
+            text-decoration: none;
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            transition: background-color 0.3s ease;
+        }
+
+        #main-nav a:hover {
+            background-color: #555;
+        }
+
+        #main-nav a.active {
+            background-color: #007bff;
+        }
+
+        main {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 0 1rem;
+        }
+
+        h1 {
+            color: #333;
+            margin-bottom: 2rem;
+            font-size: 2rem;
+        }
+
+        h2 {
+            color: #555;
+            margin-top: 2rem;
+            margin-bottom: 1rem;
+            border-bottom: 2px solid #007bff;
+            padding-bottom: 0.5rem;
+        }
+
+        /* Book Details Section */
+        #bookDetails {
+            background-color: #f9f9f9;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        #bookDetails h2 {
+            margin-top: 0;
+            color: #333;
+            font-size: 1.8rem;
+        }
+
+        #bookDetails p {
+            margin: 0.75rem 0;
+            font-size: 1rem;
+            line-height: 1.6;
+        }
+
+        #bookDetails strong {
+            color: #333;
+            font-weight: 600;
+        }
+
+        #bookDetails span {
+            color: #666;
+        }
+
+        /* Review Form Styles */
+        #reviewForm {
+            background-color: #fff;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        #reviewForm label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            color: #333;
+        }
+
+        #reviewForm input[type="number"],
+        #reviewForm textarea {
+            width: 100%;
+            padding: 0.75rem;
+            margin-bottom: 1rem;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 1rem;
+            font-family: inherit;
+            box-sizing: border-box;
+        }
+
+        #reviewForm input[type="number"]:focus,
+        #reviewForm textarea:focus {
+            outline: none;
+            border-color: #007bff;
+            box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+        }
+
+        #reviewForm textarea {
+            resize: vertical;
+            min-height: 120px;
+        }
+
+        #reviewForm button {
+            background-color: #007bff;
+            color: #fff;
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 4px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        #reviewForm button:hover {
+            background-color: #0056b3;
+        }
+
+        #reviewForm button:disabled {
+            background-color: #ccc;
+            cursor: not-allowed;
+        }
+
+        /* Message Styles */
+        .message {
+            padding: 1rem;
+            margin-bottom: 1rem;
+            border-radius: 4px;
+            font-weight: 500;
+        }
+
+        .message.info {
+            background-color: #d1ecf1;
+            color: #0c5460;
+            border: 1px solid #bee5eb;
+        }
+
+        .message.success {
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .message.error {
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+
+        /* Reviews List Styles */
+        #reviewsList {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .review-card {
+            background-color: #fff;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+            transition: box-shadow 0.3s ease;
+        }
+
+        .review-card:hover {
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        .review-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0.75rem;
+        }
+
+        .review-header strong {
+            color: #333;
+            font-size: 1rem;
+        }
+
+        .review-header span {
+            color: #ffc107;
+            font-size: 1.2rem;
+            letter-spacing: 0.2rem;
+        }
+
+        .review-comment {
+            color: #555;
+            font-size: 0.95rem;
+            line-height: 1.6;
+            margin: 0.75rem 0;
+        }
+
+        .review-card small {
+            color: #999;
+            font-size: 0.85rem;
+        }
+
+        .no-results {
+            text-align: center;
+            color: #999;
+            padding: 2rem;
+            font-style: italic;
+        }
+
+        /* Auth Warning */
+        #auth-warning {
+            background-color: #fff3cd;
+            border: 1px solid #ffc107;
+            color: #856404;
+            padding: 1rem;
+            border-radius: 4px;
+            margin-bottom: 1.5rem;
+            text-align: center;
+        }
+
+        #auth-warning a {
+            color: #007bff;
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        #auth-warning a:hover {
+            text-decoration: underline;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            #main-nav {
+                flex-direction: column;
+            }
+
+            #main-nav a {
+                width: 100%;
+                text-align: center;
+            }
+
+            h1 {
+                font-size: 1.5rem;
+            }
+
+            h2 {
+                font-size: 1.3rem;
+            }
+
+            #bookDetails {
+                padding: 1rem;
+            }
+
+            #reviewForm {
+                padding: 1rem;
+            }
+
+            .review-card {
+                padding: 1rem;
+            }
+
+            .review-header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .review-header span {
+                margin-top: 0.5rem;
+            }
+
+            main {
+                padding: 0 0.5rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            h1 {
+                font-size: 1.3rem;
+                margin-bottom: 1rem;
+            }
+
+            h2 {
+                font-size: 1.1rem;
+            }
+
+            #reviewForm input[type="number"],
+            #reviewForm textarea {
+                padding: 0.5rem;
+            }
+
+            #reviewForm button {
+                width: 100%;
+                padding: 0.75rem;
+            }
+
+            .review-card {
+                padding: 0.75rem;
+                margin-bottom: 0.75rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav id="main-nav">
+        <a href="/">Home</a> |
+        <a href="/search.html">Search</a> |
+        <a href="/profile.html">Profile</a> |
+        <a id="my-reviews-link" href="/review.html" style="display:none">My Reviews</a>
+    </nav>
+
+    <main>
+        <h1>Book Reviews</h1>
+
+        <div id="message"></div>
+        <div id="auth-warning" style="display:none">
+            <p>Please <a href="/login.html">log in</a> to write a review.</p>
+        </div>
+
+        <section id="bookDetails"></section>
+
+        <section id="review-form-section" style="display:none">
+            <h2>Write Your Review</h2>
+            <form id="reviewForm">
+                <label for="rating">Rating (1-5)</label>
+                <input id="rating" type="number" min="1" max="5" required />
+
+                <label for="comment">Comment</label>
+                <textarea id="comment"></textarea>
+
+                <button type="submit">Submit Review</button>
+            </form>
+        </section>
+
+        <section>
+            <h2>All Reviews</h2>
+            <ul id="reviewsList"></ul>
+        </section>
+    </main>
+
+    <script src="/js/review-page.js"></script>
+</body>
+</html>
