@@ -153,7 +153,18 @@ const bookSearch = {
             if (!token2) {
                 reviewLink.addEventListener('click', (ev) => {
                     ev.preventDefault();
-                    alert('Please login to write a review');
+                    // Use the reusable modal if available, otherwise fallback to alert
+                    const href = reviewLink.href;
+                    if (typeof window.showLoginModal === 'function') {
+                        window.showLoginModal(href);
+                    } else {
+                        const proceed = confirm('Please login to write a review.\n\nPress OK to go to login page, Cancel to view reviews only.');
+                        if (proceed) {
+                            window.location.href = '/login.html?next=' + encodeURIComponent(href);
+                        } else {
+                            window.location.href = href;
+                        }
+                    }
                 });
             }
             actions.appendChild(reviewLink);

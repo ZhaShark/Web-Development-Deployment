@@ -114,4 +114,25 @@ module.exports = function (app) {
             res.status(500).json({ error: 'Server error' });
         }
     });
+
+    app.delete('/api/reviews/:id', authMiddleware, async (req, res) => {
+        try {
+            const id = req.params.id;
+            if (!mongoose.Types.ObjectId.isValid(id)) {
+                return res.status(400).json({ error: 'Invalid review id' });
+            }
+            const review = await Review.findById(id);
+            if (!review) {
+                return res.status(404).json({ error: 'Review not found' });
+            }
+            if (String(review.user) !== String(req.userId)) {
+                return res.status(403).json({ error: 'Not authorized to delete this review' });
+            }
+            await Review.deleteOne({ _id: id });
+            res.json({ success: true, message: 'Review deleted' });
+        } catch (err) {
+            console.error('DELETE /api/reviews/:id error:', err);
+            res.status(500).json({ error: 'Server error' });
+        }
+    });
 };

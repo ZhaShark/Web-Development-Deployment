@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Reviews - Library</title>
+    <link rel="stylesheet" href="/css/style.css">
+    <script src="/js/auth.js"></script>
+</head>
+<body>
+    <header>
+        <nav class="navbar">
+            <div class="nav-brand">
+                <h1>Library</h1>
+            </div>
+            <div class="nav-links" id="navLinks">
+                <a href="/index.html">Home</a>
+                <a href="/search.html">Book Search</a>
+                <span id="authLinks">
+                    <a href="/login.html">Login</a>
+                    <a href="/register.html">Register</a>
+                </span>
+                <span id="userLinks" style="display: none;">
+                    <a href="/profile.html">Profile</a>
+                    <a href="/my-reviews.html" class="active">My Reviews</a>
+                    <a href="/favorites.html">My Favorites</a>
+                    <a href="#" onclick="logout()">Logout</a>
+                    <span id="userWelcome"></span>
+                </span>
+            </div>
+        </nav>
+    </header>
+
+    <main class="container">
+        <h1>My Reviews</h1>
+        <div id="message" class="message"></div>
+        <section>
+            <ul id="myReviewsList"></ul>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2025 Library. All rights reserved.</p>
+    </footer>
+
+    <script src="/js/my-reviews.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const token = localStorage.getItem('token');
+            const user = localStorage.getItem('user');
+
+            if (token && user) {
+                document.getElementById('authLinks').style.display = 'none';
+                document.getElementById('userLinks').style.display = 'block';
+                document.getElementById('userWelcome').textContent = 'Welcome, ' + JSON.parse(user).username;
+            } else {
+                window.location.href = '/login.html';
+            }
+        });
+
+        function logout() {
+            localStorage.removeItem('token');
+            localStorage.removeItem('user');
+            window.location.href = '/index.html';
+        }
+    </script>
+</body>
+</html>

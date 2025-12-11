@@ -5,32 +5,8 @@
     <meta name="viewport" content="width=device-width,initial-scale=1" />
     <title>Book Reviews</title>
     <link rel="stylesheet" href="/css/style.css">
+    <script src="/js/auth.js"></script>
     <style>
-        /* Review Page Specific Styles */
-        #main-nav {
-            background-color: #333;
-            padding: 1rem;
-            margin-bottom: 2rem;
-            display: flex;
-            gap: 1rem;
-            flex-wrap: wrap;
-        }
-
-        #main-nav a {
-            color: #fff;
-            text-decoration: none;
-            padding: 0.5rem 1rem;
-            border-radius: 4px;
-            transition: background-color 0.3s ease;
-        }
-
-        #main-nav a:hover {
-            background-color: #555;
-        }
-
-        #main-nav a.active {
-            background-color: #007bff;
-        }
 
         main {
             max-width: 900px;
@@ -52,7 +28,6 @@
             padding-bottom: 0.5rem;
         }
 
-        /* Book Details Section */
         #bookDetails {
             background-color: #f9f9f9;
             border: 1px solid #ddd;
@@ -82,7 +57,6 @@
             color: #666;
         }
 
-        /* Review Form Styles */
         #reviewForm {
             background-color: #fff;
             border: 1px solid #ddd;
@@ -144,7 +118,6 @@
             cursor: not-allowed;
         }
 
-        /* Message Styles */
         .message {
             padding: 1rem;
             margin-bottom: 1rem;
@@ -170,7 +143,6 @@
             border: 1px solid #f5c6cb;
         }
 
-        /* Reviews List Styles */
         #reviewsList {
             list-style: none;
             padding: 0;
@@ -228,7 +200,6 @@
             font-style: italic;
         }
 
-        /* Auth Warning */
         #auth-warning {
             background-color: #fff3cd;
             border: 1px solid #ffc107;
@@ -249,13 +220,12 @@
             text-decoration: underline;
         }
 
-        /* Responsive Design */
         @media (max-width: 768px) {
-            #main-nav {
+            .nav-links {
                 flex-direction: column;
             }
 
-            #main-nav a {
+            .nav-links a {
                 width: 100%;
                 text-align: center;
             }
@@ -322,12 +292,27 @@
     </style>
 </head>
 <body>
-    <nav id="main-nav">
-        <a href="/">Home</a> |
-        <a href="/search.html">Search</a> |
-        <a href="/profile.html">Profile</a> |
-        <a id="my-reviews-link" href="/review.html" style="display:none">My Reviews</a>
-    </nav>
+    <header>
+        <nav class="navbar">
+            <div class="nav-brand">
+                <h1>Library</h1>
+            </div>
+            <div class="nav-links" id="navLinks">
+                <a href="/index.html">Home</a>
+                <a href="/search.html">Book Search</a>
+                <span id="authLinks">
+                    <a href="/login.html">Login</a>
+                    <a href="/register.html">Register</a>
+                </span>
+                <span id="userLinks" style="display: none;">
+                    <a href="/profile.html">Profile</a>
+                    <a href="/my-reviews.html">My Reviews</a>
+                    <a href="#" onclick="logout()">Logout</a>
+                    <span id="userWelcome"></span>
+                </span>
+            </div>
+        </nav>
+    </header>
 
     <main>
         <h1>Book Reviews</h1>
@@ -359,5 +344,26 @@
     </main>
 
     <script src="/js/review-page.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const token = localStorage.getItem('token');
+            const user = localStorage.getItem('user');
+
+            if (token && user) {
+                const authLinks = document.getElementById('authLinks');
+                const userLinks = document.getElementById('userLinks');
+                if (authLinks) authLinks.style.display = 'none';
+                if (userLinks) userLinks.style.display = 'block';
+                const welcome = document.getElementById('userWelcome');
+                if (welcome) welcome.textContent = 'Welcome, ' + JSON.parse(user).username;
+            }
+        });
+
+        function logout() {
+            localStorage.removeItem('token');
+            localStorage.removeItem('user');
+            window.location.href = '/index.html';
+        }
+    </script>
 </body>
 </html>

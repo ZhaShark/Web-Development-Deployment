@@ -153,6 +153,14 @@ const reviewPage = {
         }
 
         list.innerHTML = '';
+        const currentUser = (() => {
+            try {
+                return JSON.parse(localStorage.getItem('user') || 'null');
+            } catch (e) {
+                return null;
+            }
+        })();
+        const currentUserId = currentUser && (currentUser._id || currentUser.id || currentUser.userId) ? (currentUser._id || currentUser.id || currentUser.userId) : null;
         reviews.forEach(r => {
             const card = document.createElement('div');
             card.className = 'review-card';
@@ -178,6 +186,28 @@ const reviewPage = {
             const small = document.createElement('small');
             const created = r.createdAt ? new Date(r.createdAt) : null;
             small.textContent = created ? created.toLocaleString() : '';
+
+            if (currentUserId && r.user) {
+                const reviewUserId = r.user._id || r.user.id || r.user;
+                if (String(reviewUserId) === String(currentUserId)) {
+                    const delBtn = document.createElement('button');
+                    delBtn.type = 'button';
+                    delBtn.textContent = 'Delete';
+                    delBtn.className = 'btn btn-secondary';
+                    delBtn.addEventListener('click', async () => {
+                        try {
+                            await this.requestWithAuth(`/reviews/${encodeURIComponent(r._id)}`, { method: 'DELETE' });
+                            const bookId = this.getBookIdFromURL();
+                            const reviews = await this.get(`/books/${bookId}/reviews`);
+                            this.renderReviews(reviews);
+                            this.showMessage('Review deleted', 'success');
+                        } catch (err) {
+                            this.showMessage(err.message || 'Failed to delete review', 'error');
+                        }
+                    });
+                    header.appendChild(delBtn);
+                }
+            }
 
             card.appendChild(header);
             card.appendChild(commentP);
