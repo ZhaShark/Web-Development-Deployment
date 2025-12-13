@@ -64,7 +64,6 @@ const favoritesManager = {
     displayFavorites(favorites) {
         const favoritesList = document.getElementById('favoritesList');
         
-        // 过滤掉无效的图书数据
         const validFavorites = favorites.filter(book => book && book._id);
         
         console.log('Displaying valid favorites:', validFavorites.length);
@@ -90,7 +89,6 @@ const favoritesManager = {
                 ${book.library_address ? `<p><strong>Address:</strong> ${book.library_address}</p>` : ''}
                 ${book.library_phone ? `<p><strong>Phone:</strong> ${book.library_phone}</p>` : ''}
                 <p><strong>Available Copies:</strong> <span class="copies-available">${book.copies_available !== undefined ? book.copies_available : 'Unknown'}</span></p>
-                <!-- 移除了借书按钮 -->
             </div>
         `).join('');
     },
